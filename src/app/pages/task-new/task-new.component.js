@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { TaskService } from '../../../services/task.service';
@@ -23,10 +23,8 @@ import { TaskFormComponent } from '../../../components/task-form/task-form.compo
 export class TaskNewComponent {
   users = [];
 
-  constructor(taskService, router) {
-    this.taskService = taskService;
-    this.router = router;
-  }
+  taskService = inject(TaskService);
+  router = inject(Router);
 
   async ngOnInit() {
     this.users = await this.taskService.fetchUsers();
