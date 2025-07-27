@@ -10,7 +10,9 @@ import { TaskFormComponent } from '../../../components/task-form/task-form.compo
   selector: 'app-task-edit',
   template: `
     <div class="container mx-auto p-4">
-      <h1 class="text-2xl font-bold mb-6">Edit Task</h1>
+      <h1 class="text-2xl font-bold mb-6 text-blue-400">
+        <span class="text-green-400">></span> Edit Task
+      </h1>
       
       <app-task-form 
         [task]="task"
