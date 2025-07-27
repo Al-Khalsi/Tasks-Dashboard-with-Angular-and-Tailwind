@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { TaskService } from '../../../services/task.service';
-import { TaskFormComponent } from '../../../components/task-form/task-form.component';
+import { TaskService } from '../../../services/task.service.js';
+import { TaskFormComponent } from '../../../components/task-form/task-form.component.js';
 
 @Component({
   standalone: true,
@@ -25,16 +25,14 @@ export class TaskEditComponent {
   task = null;
   users = [];
 
-  constructor(taskService, route, router) {
-    this.taskService = taskService;
-    this.route = route;
-    this.router = router;
-  }
+  TaskService = inject(TaskService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
 
   async ngOnInit() {
-    this.users = await this.taskService.fetchUsers();
+    this.users = await this.TaskService.fetchUsers();
     const taskId = this.route.snapshot.paramMap.get('id');
-    this.task = this.taskService.getTaskById(taskId);
+    this.task = this.TaskService.getTaskById(taskId);
     
     if (!this.task) {
       this.router.navigate(['/tasks']);
@@ -42,7 +40,7 @@ export class TaskEditComponent {
   }
 
   onSubmit(updatedTask) {
-    this.taskService.updateTask(this.task.id, updatedTask);
+    this.TaskService.updateTask(this.task.id, updatedTask);
     this.router.navigate(['/tasks']);
   }
 }
