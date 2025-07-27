@@ -14,7 +14,7 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'team-tasks-dashboard' title`, () => {
+  it('should have the \'team-tasks-dashboard\' title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('team-tasks-dashboard');
@@ -23,7 +23,7 @@ describe('AppComponent', () => {
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
+    const compiled = fixture.nativeElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Hello, team-tasks-dashboard');
   });
 });
