@@ -30,6 +30,19 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
       </div>
       
       <div>
+        <label class="block text-gray-300">Priority</label>
+        <select 
+          formControlName="priority"
+          class="w-full p-2 border border-gray-700 rounded bg-gray-800 text-gray-100
+                 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="high">High</option>
+          <option value="medium" selected>Medium</option>
+          <option value="low">Low</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      
+      <div>
         <label class="block text-gray-300">Assigned User</label>
         <select 
           formControlName="assignedUser"
@@ -72,13 +85,17 @@ export class TaskFormComponent {
   taskForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl(''),
+    priority: new FormControl('medium'),
     assignedUser: new FormControl(null),
     completed: new FormControl(false)
   });
 
   ngOnChanges() {
     if (this.task) {
-      this.taskForm.patchValue(this.task);
+      this.taskForm.patchValue({
+        ...this.task,
+        priority: this.task.priority || 'medium'
+      });
     }
   }
 

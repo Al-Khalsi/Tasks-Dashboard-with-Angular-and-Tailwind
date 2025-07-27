@@ -19,6 +19,12 @@ import { RouterModule } from '@angular/router';
            (dragleave)="dragLeave($event)"
            (drop)="drop($event, i)"
            (dragend)="dragEnd($event)">
+        
+        <!-- Priority Tag -->
+        <div class="priority-tag mb-2" [class]="'priority-' + (task.priority || 'medium')">
+          {{ getPriorityLabel(task.priority) }}
+        </div>
+        
         <h3 class="font-bold text-blue-400">{{ task.title }}</h3>
         <p class="text-gray-400 mt-2">{{ task.description || 'No description' }}</p>
         <div class="flex justify-between items-center mt-3">
@@ -59,12 +65,44 @@ import { RouterModule } from '@angular/router';
       margin-bottom: 12px;
       padding-bottom: 16px;
     }
+    .priority-tag {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .priority-high {
+      background-color: #dc2626;
+      color: white;
+    }
+    .priority-medium {
+      background-color: #eab308;
+      color: #1f2937;
+    }
+    .priority-low {
+      background-color: #22c55e;
+      color: white;
+    }
+    .priority-none {
+      background-color: #4b5563;
+      color: #d1d5db;
+    }
   `]
 })
 export class TaskListComponent {
   @Input() tasks = [];
   draggedItemIndex = null;
   dropPosition = null;
+
+  getPriorityLabel(priority) {
+    switch (priority) {
+      case 'high': return 'High';
+      case 'medium': return 'Medium';
+      case 'low': return 'Low';
+      default: return 'None';
+    }
+  }
 
   dragStart(event, index) {
     this.draggedItemIndex = index;
@@ -77,13 +115,13 @@ export class TaskListComponent {
   dragOver(event, index) {
     event.preventDefault();
     if (index === this.draggedItemIndex) return;
-    
+
     const target = event.currentTarget;
     const rect = target.getBoundingClientRect();
     const midpoint = rect.top + rect.height / 2;
-    
+
     target.classList.remove('drop-target-above', 'drop-target-below', 'drop-target');
-    
+
     if (event.clientY < midpoint) {
       target.classList.add('drop-target-above');
       this.dropPosition = 'above';
@@ -91,7 +129,7 @@ export class TaskListComponent {
       target.classList.add('drop-target-below');
       this.dropPosition = 'below';
     }
-    
+
     target.classList.add('drop-target');
   }
 
@@ -106,18 +144,18 @@ export class TaskListComponent {
   drop(event, dropIndex) {
     event.preventDefault();
     const draggedIndex = this.draggedItemIndex;
-    
+
     if (draggedIndex !== dropIndex) {
       const itemToMove = this.tasks[draggedIndex];
       this.tasks.splice(draggedIndex, 1);
-      
-      const adjustedDropIndex = this.dropPosition === 'below' && dropIndex > draggedIndex 
-        ? dropIndex 
+
+      const adjustedDropIndex = this.dropPosition === 'below' && dropIndex > draggedIndex
+        ? dropIndex
         : dropIndex;
-      
+
       this.tasks.splice(adjustedDropIndex, 0, itemToMove);
     }
-    
+
     this.resetDropStyles();
   }
 
@@ -129,9 +167,9 @@ export class TaskListComponent {
     const items = document.querySelectorAll('.task-item');
     items.forEach(item => {
       item.classList.remove(
-        'dragging', 
-        'drop-target', 
-        'drop-target-above', 
+        'dragging',
+        'drop-target',
+        'drop-target-above',
         'drop-target-below'
       );
     });
