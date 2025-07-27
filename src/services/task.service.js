@@ -1,3 +1,9 @@
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+
 export class TaskService {
     constructor() {
         this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
