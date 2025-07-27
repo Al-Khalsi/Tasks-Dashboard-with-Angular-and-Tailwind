@@ -15,6 +15,31 @@ export class TaskService {
         }
     }
 
+    getTasks() {
+        return [...this.tasks];
+    }
+
+    getTaskById(id) {
+        return this.tasks.find(task => task.id === id);
+    }
+
+    addTask(task) {
+        const newTask = { ...task, id: Date.now().toString() };
+        this.tasks.push(newTask);
+        this._saveToLocalStorage();
+        return newTask;
+    }
+
+    updateTask(id, updatedTask) {
+        const index = this.tasks.findIndex(task => task.id === id);
+        if (index !== -1) {
+            this.tasks[index] = { ...this.tasks[index], ...updatedTask };
+            this._saveToLocalStorage();
+            return this.tasks[index];
+        }
+        return null;
+    }
+
     _saveToLocalStorage() {
         localStorage.setItem('tasks', JSON.stringify(this.tasks));
     }
