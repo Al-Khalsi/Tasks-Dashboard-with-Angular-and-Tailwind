@@ -1,191 +1,169 @@
-🧩 Team Tasks Dashboard
-A lightweight task management dashboard built with Angular and Tailwind CSS with full authentication capabilities. This project allows users to register, login, and manage team tasks.
+# 🤩 Team Tasks Dashboard
 
-🚀 Features
-🔐 Authentication System
-User Registration (/register)
+**A lightweight team task management dashboard built with Angular 19 and Tailwind CSS 4, featuring full authentication and session management.**
 
-Username (required, min 3 chars)
+---
 
-Email (required, valid format)
+## 🚀 Features
 
-Password (required, min 6 chars)
+### 🔐 Authentication System
 
-Password confirmation
+* **User Registration** `/register`
 
-Real-time validation with error messages
+  * Username (min 3 characters)
+  * Valid email format
+  * Password (min 6 characters)
+  * Password confirmation
+  * Real-time validation with error messages
 
-User Login (/login)
+* **User Login** `/login`
 
-Login with either email or username
+  * Login using email or username
+  * Password field
+  * Form validation & error handling
 
-Password field
+* **Protected Routes**
 
-Form validation
+  * All task-related routes require authentication
+  * Unauthenticated users are redirected to the login page
 
-Error handling
+* **Session Management**
 
-Protected Routes
+  * Persistent login state via LocalStorage
+  * Automatic logout capability
 
-All task routes require authentication
+---
 
-Unauthenticated users redirect to login page
+## ✅ Task Dashboard `/tasks`
 
-Session Management
+* Displays tasks as responsive cards
 
-Persistent login state using LocalStorage
+* Task Fields:
 
-Automatic logout capability
+  * Title
+  * Description
+  * Priority (High / Medium / Low)
+  * Completion status
+  * Assigned user
 
-✅ Task Dashboard (/tasks)
-List of team tasks displayed as responsive cards
+* Filter & Search Options:
 
-Task fields include:
+  * Filter by task status
+  * Search by title
+  * Filter by priority level
 
-Title
+---
 
-Description
+## ✍️ Task Management
 
-Priority (High/Medium/Low)
-
-Completion Status
-
-Assigned User
-
-Filter Options:
-
-Filter by task status
-
-Search by task title
-
-Filter by priority level
-
-✍️ Task Management
-Add Task (/tasks/new)
-
-Edit Task (/tasks/:id/edit)
+* **Add New Task** `/tasks/new`
+* **Edit Task** `/tasks/:id/edit`
 
 Form Features:
 
-Title (required)
+* Required title
+* Optional description
+* Priority selection
+* User assignment dropdown
+* Status toggle
+* Client-side form validation
 
-Description (optional)
+---
 
-Priority selection
+## 👥 User Management
 
-User assignment dropdown
+* Fetches team members from:
+  `https://jsonplaceholder.typicode.com/users`
+* Displays list of users
+* Tasks can be assigned to any user
 
-Status toggle
+---
 
-Client-side validation
+## 🌐 Routing
 
-👥 User Management
-Team member display section
+| Path              | Description        |
+| ----------------- | ------------------ |
+| `/login`          | User login         |
+| `/register`       | User registration  |
+| `/logout`         | Logout session     |
+| `/tasks`          | Task dashboard     |
+| `/tasks/new`      | Add new task       |
+| `/tasks/:id/edit` | Edit existing task |
 
-User data fetched from:
+---
 
-bash
-https://jsonplaceholder.typicode.com/users
-Assign tasks to team members
+## 🛠️ Tech Stack
 
-🌐 Routing
-/login - User login
+* Angular 19
+* Tailwind CSS 4
+* RxJS for reactive state
+* LocalStorage for persistent data
+* Standalone component architecture
 
-/register - User registration
+---
 
-/logout - Session termination
+## 🔒 Data Storage (LocalStorage)
 
-/tasks - Main dashboard (protected)
+### User Data:
 
-/tasks/new - Add task (protected)
+* Stored under `auth_users`
+* Fields:
 
-/tasks/:id/edit - Edit task (protected)
+  * Auto-generated ID
+  * Username
+  * Email
+  * Hashed password (basic implementation)
+  * Account creation timestamp
 
-🛠️ Tech Stack
-Angular 19
+### Session:
 
-Tailwind CSS 4
+* Current session stored under `current_user`
+* Cleared on logout
 
-RxJS for reactive state management
+### Tasks:
 
-LocalStorage for:
+* Stored under `tasks`
+* Full CRUD support
 
-Persistent user sessions
+---
 
-Task data storage
+## 📦 Installation & Setup
 
-User credentials storage (in secure format)
-
-Standalone components architecture
-
-🔒 Data Storage
-The application uses browser's LocalStorage to persist:
-
-User Data:
-
-Stored under auth_users key
-
-Contains:
-
-User ID (auto-generated)
-
-Username
-
-Email
-
-Hashed password (basic implementation)
-
-Account creation timestamp
-
-Session Data:
-
-Current user stored under current_user key
-
-Cleared on logout
-
-Task Data:
-
-Stored under tasks key
-
-Full CRUD functionality
-
-📦 Installation & Setup
-Clone the repository
-
-bash
+```bash
 git clone https://github.com/Al-Khalsi/team-tasks-dashboard.git
 cd team-tasks-dashboard
-Install dependencies
-
-bash
 npm install
-Run development server
-
-bash
 npm start
-Access the application
+```
 
-text
+Access the app:
+
+```
 http://localhost:4200
-🧪 Testing Credentials
-For quick testing, you can use these default credentials after registering:
+```
 
-Username: testuser
-Email: test@example.com
-Password: password123
+---
 
-🚨 Security Notes
-This implementation uses basic client-side storage
+## 🥮 Testing Credentials
 
-For production use:
+To test quickly after registration:
 
-Passwords should be properly hashed
+* **Username:** `testuser`
+* **Email:** `test@example.com`
+* **Password:** `password123`
 
-Consider adding server-side validation
+---
 
-Implement proper session tokens
+## ⚠️ Security Notes
 
-All authentication occurs client-side in this demo version
+> This is a client-side demo. For production:
 
-📝 License
-MIT License - Free for personal and commercial use
+* Passwords should be hashed securely
+* Add server-side validation
+* Use secure session tokens
+
+---
+
+## 📝 License
+
+**MIT License** — Free for personal and commercial use
