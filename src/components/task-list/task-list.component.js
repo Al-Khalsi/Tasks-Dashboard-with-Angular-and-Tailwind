@@ -7,10 +7,10 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   selector: 'app-task-list',
   template: `
-    <div class="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3" id="taskList">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" id="taskList">
       <div *ngFor="let task of tasks; let i = index" 
            class="task-item p-4 border border-gray-700 rounded bg-gray-800 shadow-lg
-                  hover:border-blue-400 transition-all duration-200 cursor-grab
+                  hover:border-blue-400 transition-all duration-200 cursor-grab flex flex-col justify-between
                   active:cursor-grabbing"
            draggable="true"
            (dragstart)="dragStart($event, i)"
@@ -24,12 +24,15 @@ import { RouterModule } from '@angular/router';
            (touchend)="touchEnd($event, i)">
         
         <!-- Priority Tag -->
+         <div> 
         <div class="priority-tag mb-2" [class]="'priority-' + (task.priority || 'medium')">
           {{ getPriorityLabel(task.priority) }}
         </div>
         
         <h3 class="font-bold text-blue-400 text-sm sm:text-base">{{ task.title }}</h3>
         <p class="text-gray-400 mt-2 text-xs sm:text-sm">{{ task.description || 'No description' }}</p>
+         </div> 
+        <div> 
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-3 gap-2">
           <span class="text-xs sm:text-sm font-mono" 
                 [class.text-green-400]="task.completed" 
@@ -44,10 +47,14 @@ import { RouterModule } from '@angular/router';
            class="text-blue-400 text-xs sm:text-sm mt-2 inline-block hover:text-blue-300">
           Edit
         </a>
+        </div>
       </div>
     </div>
   `,
   styles: [`
+    .task-item {
+      overflow: hidden; /* Prevent content from overflowing the card */
+    }
     .task-item.dragging, .task-item.touch-dragging {
       opacity: 0.7;
       transform: scale(1.02);
@@ -75,6 +82,8 @@ import { RouterModule } from '@angular/router';
       font-size: 0.75rem;
       font-weight: bold;
       line-height: 1;
+      overflow-wrap: break-word; /* Ensure long priority labels wrap */
+      word-break: break-word;
     }
     .priority-high {
       background-color: #dc2626;
@@ -91,6 +100,25 @@ import { RouterModule } from '@angular/router';
     .priority-none {
       background-color: #4b5563;
       color: #d1d5db;
+    }
+    h3 {
+      overflow-wrap: break-word; /* Wrap long titles */
+      word-break: break-word;
+      hyphens: auto; /* Allow hyphenation for better wrapping */
+    }
+    p {
+      overflow-wrap: break-word; /* Wrap long descriptions */
+      word-break: break-word;
+      hyphens: auto;
+    }
+    span {
+      overflow-wrap: break-word; /* Wrap long status or assigned user text */
+      word-break: break-word;
+      hyphens: auto;
+    }
+    a {
+      overflow-wrap: break-word; /* Wrap long links */
+      word-break: break-word;
     }
   `]
 })
