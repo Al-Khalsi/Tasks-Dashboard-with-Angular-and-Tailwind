@@ -15,8 +15,8 @@ import { TaskListComponent } from '../../../components/task-list/task-list.compo
   ],
   selector: 'app-dashboard',
   template: `
-    <div class="container mx-auto p-4">
-      <h1 class="text-2xl font-bold mb-6 text-blue-400">
+    <div class="container mx-auto p-4 sm:p-6">
+      <h1 class="text-xl sm:text-2xl font-bold mb-6 text-blue-400">
         <span class="text-green-400">></span> Team Tasks
       </h1>
       
@@ -24,7 +24,7 @@ import { TaskListComponent } from '../../../components/task-list/task-list.compo
         <a 
           routerLink="/tasks/new"
           class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition-colors
-                 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+                 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 text-sm sm:text-base">
           + Add New Task
         </a>
       </div>
@@ -33,21 +33,21 @@ import { TaskListComponent } from '../../../components/task-list/task-list.compo
       
       <app-task-list [tasks]="filteredTasks"></app-task-list>
       
-      <!-- بخش جدید نمایش کاربران -->
+      <!-- بخش نمایش کاربران -->
       <div class="mt-8">
-        <h2 class="text-xl font-bold mb-4 text-blue-400">
+        <h2 class="text-lg sm:text-xl font-bold mb-4 text-blue-400">
           <span class="text-green-400">></span> Team Members ({{users.length}})
         </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <div *ngFor="let user of users" 
-               class="p-4 border border-gray-700 rounded bg-gray-800 shadow hover:border-blue-400 transition-all">
-            <div class="flex items-center space-x-3">
-              <div class="avatar bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
+               class="p-3 sm:p-4 border border-gray-700 rounded bg-gray-800 shadow hover:border-blue-400 transition-all">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+              <div class="avatar bg-blue-500 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-sm sm:text-base">
                 {{ user.name.charAt(0) }}
               </div>
-              <div>
-                <h3 class="font-medium text-white">{{ user.name }}</h3>
-                <p class="text-gray-400 text-sm">{{ user.email }}</p>
+              <div class="min-w-0">
+                <h3 class="font-medium text-white text-sm sm:text-base truncate">{{ user.name }}</h3>
+                <p class="text-gray-400 text-xs sm:text-sm truncate">{{ user.email }}</p>
               </div>
             </div>
           </div>
