@@ -1,4 +1,4 @@
-# 🤩 Team Tasks Dashboard
+# 📑 Team Tasks Dashboard
 
 **A lightweight team task management dashboard built with Angular 19 and Tailwind CSS 4, featuring full authentication and session management.**
 
