@@ -32,12 +32,39 @@ import { TaskListComponent } from '../../../components/task-list/task-list.compo
       <app-task-filter (filterChange)="onFilterChange($event)"></app-task-filter>
       
       <app-task-list [tasks]="filteredTasks"></app-task-list>
+      
+      <!-- بخش جدید نمایش کاربران -->
+      <div class="mt-8">
+        <h2 class="text-xl font-bold mb-4 text-blue-400">
+          <span class="text-green-400">></span> Team Members ({{users.length}})
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div *ngFor="let user of users" 
+               class="p-4 border border-gray-700 rounded bg-gray-800 shadow hover:border-blue-400 transition-all">
+            <div class="flex items-center space-x-3">
+              <div class="avatar bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                {{ user.name.charAt(0) }}
+              </div>
+              <div>
+                <h3 class="font-medium text-white">{{ user.name }}</h3>
+                <p class="text-gray-400 text-sm">{{ user.email }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  `
+  `,
+  styles: [`
+    .avatar {
+      font-weight: bold;
+    }
+  `]
 })
 export class DashboardComponent {
   tasks = [];
   filteredTasks = [];
+  users = [];
   filters = {
     status: '',
     searchTerm: ''
@@ -46,7 +73,7 @@ export class DashboardComponent {
   taskService = inject(TaskService);
 
   async ngOnInit() {
-    await this.taskService.fetchUsers();
+    this.users = await this.taskService.fetchUsers();
     this.tasks = this.taskService.getTasks();
     this.filteredTasks = [...this.tasks];
   }
