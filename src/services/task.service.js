@@ -40,6 +40,15 @@ export class TaskService {
         return null;
     }
 
+    filterTasks({ status, searchTerm }) {
+        return this.tasks.filter(task => {
+            const matchesStatus = !status || task.completed === (status === 'completed');
+            const matchesSearch = !searchTerm ||
+                task.title.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesStatus && matchesSearch;
+        });
+    }
+
     _saveToLocalStorage() {
         localStorage.setItem('tasks', JSON.stringify(this.tasks));
     }
