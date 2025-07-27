@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   selector: 'app-task-list',
   template: `
-    <div class="grid gap-4" id="taskList">
+    <div class="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3" id="taskList">
       <div *ngFor="let task of tasks; let i = index" 
            class="task-item p-4 border border-gray-700 rounded bg-gray-800 shadow-lg
                   hover:border-blue-400 transition-all duration-200 cursor-grab
@@ -18,34 +18,37 @@ import { RouterModule } from '@angular/router';
            (dragenter)="dragEnter($event)"
            (dragleave)="dragLeave($event)"
            (drop)="drop($event, i)"
-           (dragend)="dragEnd($event)">
+           (dragend)="dragEnd($event)"
+           (touchstart)="touchStart($event, i)"
+           (touchmove)="touchMove($event, i)"
+           (touchend)="touchEnd($event, i)">
         
         <!-- Priority Tag -->
         <div class="priority-tag mb-2" [class]="'priority-' + (task.priority || 'medium')">
           {{ getPriorityLabel(task.priority) }}
         </div>
         
-        <h3 class="font-bold text-blue-400">{{ task.title }}</h3>
-        <p class="text-gray-400 mt-2">{{ task.description || 'No description' }}</p>
-        <div class="flex justify-between items-center mt-3">
-          <span class="text-sm font-mono" 
+        <h3 class="font-bold text-blue-400 text-sm sm:text-base">{{ task.title }}</h3>
+        <p class="text-gray-400 mt-2 text-xs sm:text-sm">{{ task.description || 'No description' }}</p>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-3 gap-2">
+          <span class="text-xs sm:text-sm font-mono" 
                 [class.text-green-400]="task.completed" 
                 [class.text-yellow-400]="!task.completed">
             {{ task.completed ? '✓ Completed' : '◉ Pending' }}
           </span>
-          <span class="text-sm text-blue-400 font-mono">
+          <span class="text-xs sm:text-sm text-blue-400 font-mono">
             {{ task.assignedUser?.name || 'Unassigned' }}
           </span>
         </div>
         <a [routerLink]="['/tasks', task.id, 'edit']" 
-           class="text-blue-400 text-sm mt-2 inline-block hover:text-blue-300">
+           class="text-blue-400 text-xs sm:text-sm mt-2 inline-block hover:text-blue-300">
           Edit
         </a>
       </div>
     </div>
   `,
   styles: [`
-    .task-item.dragging {
+    .task-item.dragging, .task-item.touch-dragging {
       opacity: 0.7;
       transform: scale(1.02);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
@@ -71,6 +74,7 @@ import { RouterModule } from '@angular/router';
       border-radius: 9999px;
       font-size: 0.75rem;
       font-weight: bold;
+      line-height: 1;
     }
     .priority-high {
       background-color: #dc2626;
@@ -94,6 +98,8 @@ export class TaskListComponent {
   @Input() tasks = [];
   draggedItemIndex = null;
   dropPosition = null;
+  touchStartY = null;
+  touchTargetIndex = null;
 
   getPriorityLabel(priority) {
     switch (priority) {
@@ -104,9 +110,10 @@ export class TaskListComponent {
     }
   }
 
+  // Desktop Drag and Drop
   dragStart(event, index) {
     this.draggedItemIndex = index;
-    event.dataTransfer.setData('text/plain', index);
+    event.dataTransfer.setData('text/plain', index.toString());
     event.currentTarget.classList.add('dragging');
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setDragImage(new Image(), 0, 0);
@@ -145,7 +152,7 @@ export class TaskListComponent {
     event.preventDefault();
     const draggedIndex = this.draggedItemIndex;
 
-    if (draggedIndex !== dropIndex) {
+    if (draggedIndex !== null && draggedIndex !== dropIndex) {
       const itemToMove = this.tasks[draggedIndex];
       this.tasks.splice(draggedIndex, 1);
 
@@ -163,16 +170,72 @@ export class TaskListComponent {
     this.resetDropStyles();
   }
 
+  // Mobile Touch Events
+  touchStart(event, index) {
+    event.preventDefault();
+    this.draggedItemIndex = index;
+    this.touchStartY = event.touches[0].clientY;
+    const target = event.currentTarget;
+    target.classList.add('touch-dragging');
+  }
+
+  touchMove(event, index) {
+    event.preventDefault();
+    if (this.draggedItemIndex === null || this.touchStartY === null) return;
+
+    const touchY = event.touches[0].clientY;
+    const items = Array.from(document.querySelectorAll('.task-item'));
+    const target = items[index];
+
+    if (!target) return;
+
+    items.forEach((item, i) => {
+      if (i === this.draggedItemIndex) return;
+
+      const rect = item.getBoundingClientRect();
+      const midpoint = rect.top + rect.height / 2;
+
+      item.classList.remove('drop-target', 'drop-target-above', 'drop-target-below');
+
+      if (touchY >= rect.top && touchY <= rect.bottom) {
+        item.classList.add('drop-target');
+        this.touchTargetIndex = i;
+        this.dropPosition = touchY < midpoint ? 'above' : 'below';
+        item.classList.add(`drop-target-${this.dropPosition}`);
+      }
+    });
+  }
+
+  touchEnd(event, index) {
+    event.preventDefault();
+    if (this.draggedItemIndex !== null && this.touchTargetIndex !== null && this.draggedItemIndex !== this.touchTargetIndex) {
+      const itemToMove = this.tasks[this.draggedItemIndex];
+      this.tasks.splice(this.draggedItemIndex, 1);
+
+      const adjustedDropIndex = this.dropPosition === 'below' && this.touchTargetIndex > this.draggedItemIndex
+        ? this.touchTargetIndex
+        : this.touchTargetIndex;
+
+      this.tasks.splice(adjustedDropIndex, 0, itemToMove);
+    }
+
+    this.resetDropStyles();
+    this.touchStartY = null;
+    this.touchTargetIndex = null;
+  }
+
   resetDropStyles() {
     const items = document.querySelectorAll('.task-item');
     items.forEach(item => {
       item.classList.remove(
         'dragging',
+        'touch-dragging',
         'drop-target',
         'drop-target-above',
         'drop-target-below'
       );
     });
     this.dropPosition = null;
+    this.draggedItemIndex = null;
   }
 }
