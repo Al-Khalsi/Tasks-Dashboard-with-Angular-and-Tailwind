@@ -1,61 +1,191 @@
-# 🧩 Team Tasks Dashboard
+🧩 Team Tasks Dashboard
+A lightweight task management dashboard built with Angular and Tailwind CSS with full authentication capabilities. This project allows users to register, login, and manage team tasks.
 
-A lightweight task management dashboard built with **Angular** and **Tailwind CSS**. This project allows users to view, add, edit, and filter team tasks. It’s designed as a frontend test task to showcase Angular fundamentals, component design, routing, reactive forms, and service-based architecture.
+🚀 Features
+🔐 Authentication System
+User Registration (/register)
 
----
+Username (required, min 3 chars)
 
-## 🚀 Features
+Email (required, valid format)
 
-### ✅ Task Dashboard (`/tasks`)
-- List of team tasks displayed as cards or rows
-- Task fields include:
-  - Title
-  - Description
-  - Completion Status (Completed / Not Completed)
-  - Assigned User
-- Filter Options:
-  - Filter by task status
-  - Search by task title
+Password (required, min 6 chars)
 
-### ✍️ Task Form (`/tasks/new` & `/tasks/:id/edit`)
-- Reactive Form with validation
-  - Title (required)
-  - Description (optional)
-  - Assigned User (dropdown)
-  - Completion Status (checkbox)
-- Form works both for adding and editing tasks
+Password confirmation
 
-### 👥 User Management (Bonus)
-- Assigned User dropdown is populated by fetching from:
+Real-time validation with error messages
 
+User Login (/login)
 
-### 🌐 Routing
-- `/tasks` – View all tasks
-- `/tasks/new` – Add new task
-- `/tasks/:id/edit` – Edit existing task
+Login with either email or username
 
-### 💾 State Management
-- Tasks stored in **LocalStorage** to persist between reloads
-- All logic encapsulated in Angular services
+Password field
 
-### 🎨 UI & UX
-- Clean, responsive layout using **Tailwind CSS**
-- Mobile-friendly and minimal design
+Form validation
 
----
+Error handling
 
-## 🛠️ Tech Stack
+Protected Routes
 
-- [Angular 19](https://angular.io/)
-- [Tailwind CSS 4](https://tailwindcss.com/)
-- RxJS for state handling
-- LocalStorage for persistence
+All task routes require authentication
 
----
+Unauthenticated users redirect to login page
 
-## 📦 Installation
+Session Management
 
-1. **Clone the repository**
- ```bash
- git clone https://github.com/Al-Khalsi/team-tasks-dashboard.git
- cd team-tasks-dashboard
+Persistent login state using LocalStorage
+
+Automatic logout capability
+
+✅ Task Dashboard (/tasks)
+List of team tasks displayed as responsive cards
+
+Task fields include:
+
+Title
+
+Description
+
+Priority (High/Medium/Low)
+
+Completion Status
+
+Assigned User
+
+Filter Options:
+
+Filter by task status
+
+Search by task title
+
+Filter by priority level
+
+✍️ Task Management
+Add Task (/tasks/new)
+
+Edit Task (/tasks/:id/edit)
+
+Form Features:
+
+Title (required)
+
+Description (optional)
+
+Priority selection
+
+User assignment dropdown
+
+Status toggle
+
+Client-side validation
+
+👥 User Management
+Team member display section
+
+User data fetched from:
+
+bash
+https://jsonplaceholder.typicode.com/users
+Assign tasks to team members
+
+🌐 Routing
+/login - User login
+
+/register - User registration
+
+/logout - Session termination
+
+/tasks - Main dashboard (protected)
+
+/tasks/new - Add task (protected)
+
+/tasks/:id/edit - Edit task (protected)
+
+🛠️ Tech Stack
+Angular 19
+
+Tailwind CSS 4
+
+RxJS for reactive state management
+
+LocalStorage for:
+
+Persistent user sessions
+
+Task data storage
+
+User credentials storage (in secure format)
+
+Standalone components architecture
+
+🔒 Data Storage
+The application uses browser's LocalStorage to persist:
+
+User Data:
+
+Stored under auth_users key
+
+Contains:
+
+User ID (auto-generated)
+
+Username
+
+Email
+
+Hashed password (basic implementation)
+
+Account creation timestamp
+
+Session Data:
+
+Current user stored under current_user key
+
+Cleared on logout
+
+Task Data:
+
+Stored under tasks key
+
+Full CRUD functionality
+
+📦 Installation & Setup
+Clone the repository
+
+bash
+git clone https://github.com/Al-Khalsi/team-tasks-dashboard.git
+cd team-tasks-dashboard
+Install dependencies
+
+bash
+npm install
+Run development server
+
+bash
+npm start
+Access the application
+
+text
+http://localhost:4200
+🧪 Testing Credentials
+For quick testing, you can use these default credentials after registering:
+
+Username: testuser
+Email: test@example.com
+Password: password123
+
+🚨 Security Notes
+This implementation uses basic client-side storage
+
+For production use:
+
+Passwords should be properly hashed
+
+Consider adding server-side validation
+
+Implement proper session tokens
+
+All authentication occurs client-side in this demo version
+
+📝 License
+MIT License - Free for personal and commercial use
