@@ -16,13 +16,16 @@ import { TaskListComponent } from '../../../components/task-list/task-list.compo
   selector: 'app-dashboard',
   template: `
     <div class="container mx-auto p-4">
-      <h1 class="text-2xl font-bold mb-6">Team Tasks</h1>
+      <h1 class="text-2xl font-bold mb-6 text-blue-400">
+        <span class="text-green-400">></span> Team Tasks
+      </h1>
       
       <div class="mb-6">
         <a 
           routerLink="/tasks/new"
-          class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-          Add New Task
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition-colors
+                 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+          + Add New Task
         </a>
       </div>
       
